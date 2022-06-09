@@ -698,6 +698,8 @@ void read_params_and_check(int& argc, char *argv[], struct param* params, struct
       if( vm.count("setl0") ) {
         params->user_ridge_params_l0 = true;
         tmp_str_vec = string_split(vm["setl0"].as<string>(),",");
+
+        std::cout << "Chris: this is the right section of code" << std::endl;
         params->lambda = get_unit_params(false, "--l0", tmp_str_vec, params, sout);
         params->n_ridge_l0 = params->lambda.size();
       } else set_ridge_params(params->n_ridge_l0, params->lambda, sout);
@@ -709,6 +711,9 @@ void read_params_and_check(int& argc, char *argv[], struct param* params, struct
         tmp_str_vec = string_split(vm["setl1"].as<string>(),",");
         params->tau[0] = get_unit_params(false, "--l1", tmp_str_vec, params, sout);
         params->n_ridge_l1 = params->tau[0].size();
+        std::cout << "Chris: there are " << params->n_ridge_l1 << " ridge parameters in L1" << std::endl;
+        for(int i = 0; i < params->n_ridge_l1; i++)
+          std::cout << "Chris: " << params->tau[0][i] << std::endl;
       } else set_ridge_params(params->n_ridge_l1, params->tau[0], sout);
 
       if( params->run_l1_only && vm.count("l1-phenoList") ) {
@@ -1173,10 +1178,15 @@ ArrayXd get_unit_params(bool const& incl_bound, string const& opt, vector<string
 
   ArrayXd vvals = MapArXd( vals.data(), vals.size() ); 
   // check parameters
-  if( incl_bound && ((vvals<0) || (vvals>1)).any() )
-    throw "must specify values for " + opt + " in [0,1].";
-  else if( !incl_bound && ((vvals<=0) || (vvals>=1)).any() )
-    throw "must specify values for " + opt + " in (0,1).";
+  //if( incl_bound && ((vvals<0) || (vvals>1)).any() )
+  //  throw "must specify values for " + opt + " in [0,1].";
+  //else if( !incl_bound && ((vvals<=0) || (vvals>=1)).any() )
+  //  throw "must specify values for " + opt + " in (0,1).";
+
+  std::cout << "edited by Chris, now we have these values: " << std::endl;
+
+  for(size_t i = 0; i < vvals.size(); i++)
+    std::cout << vvals(i) << std::endl;
 
   return vvals;
 
